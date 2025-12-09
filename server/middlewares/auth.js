@@ -2,7 +2,17 @@ import jwt from 'jsonwebtoken';
 
 
 const userauth = (req, res, next) => {
- const token = req.headers.authorization?.split(" ")[1];
+const authHeader = req.headers.authorization;
+
+// if (!authHeader || !authHeader.startsWith("Bearer ")) {
+//     return res.status(401).json({
+//         success: false,
+//         message: "Authorization token missing or invalid"
+//     });
+// }   
+
+const token = authHeader.split(" ")[0];
+
 
  if (!token) {
      return res.json({ success:false,message: 'Not authorized, Login Again' });
