@@ -9,7 +9,7 @@ import axios from 'axios'
 const Login = () => {
    
     const [state, setstate] = useState('Login')
-    const {setshowLogin,backendUrl} = useContext(AppContext)
+    const {setshowLogin,backendUrl,setToken,setuser} = useContext(AppContext)
 
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')  
@@ -19,10 +19,19 @@ const Login = () => {
         e.preventDefault()
         try {
           if(state==='Login'){
-            await axios.post(backendUrl+'/api/auth/login',{
+            const {data} = await axios.post(backendUrl+'/api/auth/login',{
                 email,
                 password
             })
+            if(data.success){
+              setToken(data.token)
+              setuser(data.user)
+              localStorage.getItem('token',data.token)
+              setshowLogin(false)
+            }else{
+             
+            }
+
           }
 
 
