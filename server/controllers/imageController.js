@@ -8,7 +8,8 @@ export const generateImage = async (req, res) => {
 
     try {
 
-        const { userId, prompt } = req.body;
+        const { prompt } = req.body;
+        const userId = req.userId;
 
         const user = await userModel.findById(userId);
 
