@@ -1,7 +1,8 @@
 import axios from "axios";
-import { createContext,useEffect,useState} from "react";
+import { createContext,use,useEffect,useState} from "react";
 import {toast} from 'react-toastify'
-import axios from "axios";
+
+
 
 export const AppContext = createContext()
 
@@ -14,18 +15,44 @@ const AppContextProvider = (props)=>{
 
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL
+    const navigate = useNavigate()
 
     const loadCreditdata = async()=>{
         try {
-            const {data}= await axios.get(backendUrl+'/api/user/credits',{
-                headers:{ token}
+            const {data}= await axios.get(backendUrl+'/api/user/credits', {
+                headers:{ token
+                }
             })
+            console.log(data);
+            
             if(data.success){
                 setCredit(data.credits)
                 setuser(data.user)
             }
         } catch (error) {
             console.log(error);
+            toast.error(error.message)
+        }
+    }
+
+    const generateImage = async (prompt)=>{
+        try {
+           const {data} = await axios.post(backendUrl+'/api/image/generate-image',{prompt
+            },{
+                headers:{ token
+                }
+            })
+            if(data.success){
+               loadCreditdata()
+               return data.resultImage
+            }else{
+                toast.error(data.message)
+                loadCreditdata()
+                if(data.creditBalance === 0){  
+                    navigate('/buy')
+                }
+            }
+        } catch (error) {
             toast.error(error.message)
         }
     }
@@ -40,10 +67,10 @@ const AppContextProvider = (props)=>{
         if(token){
             loadCreditdata()
         }
-    })
+    },[token])
     
     const value={
-        user,setuser,showLogin,setshowLogin, backendUrl,token,setToken,credit,setCredit,loadCreditdata,logout
+        user,setuser,showLogin,setshowLogin, backendUrl,token,setToken,credit,setCredit,loadCreditdata,logout,generateImage
     }
 
     return(

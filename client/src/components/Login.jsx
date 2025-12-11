@@ -27,7 +27,7 @@ const Login = () => {
             if(data.success){
               setToken(data.token)
               setuser(data.user)
-              localStorage.getItem('token',data.token)
+              localStorage.setItem('token',data.token)
               setshowLogin(false)
             }else{
               toast.error(data.message)
@@ -42,7 +42,7 @@ const Login = () => {
             if(data.success){
               setToken(data.token)
               setuser(data.user)
-              localStorage.getItem('token',data.token)
+              localStorage.setItem('token',data.token)
               setshowLogin(false)
             }else{
               toast.error(data.message)
