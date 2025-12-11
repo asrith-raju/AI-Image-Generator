@@ -1,6 +1,7 @@
 import axios from "axios";
 import { createContext,use,useEffect,useState} from "react";
 import {toast} from 'react-toastify'
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -49,6 +50,7 @@ const AppContextProvider = (props)=>{
                 toast.error(data.message)
                 loadCreditdata()
                 if(data.creditBalance === 0){  
+
                     navigate('/buy')
                 }
             }
