@@ -12,6 +12,10 @@ const BuyCredit = () => {
 
   const navigate = useNavigate()
 
+  const initPay = async(order)=>{
+
+  }
+
   const paymentRazorpay = async(planId)=>{  
      try {
       if(!user){
@@ -20,7 +24,7 @@ const BuyCredit = () => {
       const {data} = await axios.post(backendUrl+'/api/user/pay-razorr',{planId},{ headers:{token}})
 
       if(data.success){
-        
+         initPay(data.order)
       }
      }
        catch (error) {
@@ -48,7 +52,7 @@ const BuyCredit = () => {
               <p className='text-sm'>{item.desc}</p>
               <p className='mt-6'> 
                 <span className='text-3xl font-medium'>${item.price}</span> / {item.credits} credits </p>
-                <button className='w-full bg-gray-800 text-white mt-8 text-sm rounded-md py-2.5 min-w-52'>{user?'Purchase':'Get Started'}</button>
+                <button onClick={()=>paymentRazorpay(item.id)} className='w-full bg-gray-800 text-white mt-8 text-sm rounded-md py-2.5 min-w-52'>{user?'Purchase':'Get Started'}</button>
            </div>
         ))}
        </div>
