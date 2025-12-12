@@ -73,31 +73,38 @@ const razorpayInstance = new razorpay({
 });
 
 const paymentRazorpay = async (req, res) => {
+     
      try {
         const {userId,planId}=req.body;
         const userData = await userModel.findById(userId);
         if(!userId || !planId){
             return res.json({ success:false,message: 'Missing Details' });
         }
+      
         let credits,plan,amount,date;
+
         switch(planId){
             case 'Basic':
                 plan='Basic';
                 credits=100;
                 amount=10;
+                
+                break;
             case 'Advanced':
                 plan='Advanced';
                 credits=500;
                 amount=50;
+                break;
             case'Business':
                 plan='Business';
                 credits=5000;
                 amount=250;
+                break;
             default:
                 return res.json({ success:false,message: 'Plan Not Found' });        
 
         }
-        date = date.now();
+        date = Date.now();
         const transactionData = {
             userId,
             plan,
@@ -109,7 +116,7 @@ const paymentRazorpay = async (req, res) => {
 
         const options = { 
             amount: amount * 100,
-            currency: "INR",
+            currency: process.env.CURRENCY,
             receipt: newTransaction._id,
         };
          await razorpayInstance.orders.create(options, (error, order) => {
@@ -127,8 +134,7 @@ const paymentRazorpay = async (req, res) => {
      }
    
 
-        
-        }
+}
 
         
 
