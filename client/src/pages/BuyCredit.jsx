@@ -12,30 +12,48 @@ const BuyCredit = () => {
 
   const navigate = useNavigate()
 
-  const initPay = async(order)=>{
-     const options = {
-      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-      amount: order.amount,
-      currency: order.currency,
-      name:'Credits Payment',
-      description:'Credits Payment',
-      order_id: order.id,
-      receipt: order.receipt,
-      handler: async(response)=>{
-      console.log(response)
-    }
-    
-}
-  const rzp = new window.Razorpay(options);
-   rzp.open()
+  const initPay = (order) => {
+
+  console.log("✅ Razorpay SDK:", window.Razorpay);
+  console.log("✅ Order object:", order);
+  console.log("✅ Order ID:", order?.id);
+  console.log("✅ Razorpay Key:", import.meta.env.VITE_RAZORPAY_KEY_ID);
+
+  if (!window.Razorpay) {
+    toast.error("Razorpay SDK not loaded");
+    return;
   }
 
+  const options = {
+    key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+    amount: order.amount,
+    currency: order.currency,
+    name: "Credits Payment",
+    description: "Credits Payment",
+    order_id: order.id,
+    receipt: order.receipt,
+    handler: function (response) {
+      console.log("Payment Success:", response);
+      toast.success("Payment successful!");
+    },
+    theme: {
+      color: "#1f2937",
+    },
+  };
+
+  const rzp = new window.Razorpay(options);
+  rzp.open();
+};
+
   const paymentRazorpay = async(planId)=>{  
+ 
      try {
       if(!user){
         setshowLogin(true)
+        return
       }
       const {data} = await axios.post(backendUrl+'/api/user/pay-razor',{planId},{ headers:{token}})
+       console.log("✅ Payment Response Data:", data);
 
       if(data.success){
          initPay(data.order)
