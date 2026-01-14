@@ -1,5 +1,5 @@
 
-# Imagify 🎨🤖
+# Imagify 
 
 Imagify is a **full‑stack AI Image Generator application** that converts text prompts into stunning images using AI.  
 It includes **authentication, credit-based image generation, and Razorpay payments**, built with the MERN stack.
